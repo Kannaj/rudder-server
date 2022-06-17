@@ -43,6 +43,12 @@ func getFrequencyCounter(schemaHash string, key string) *FrequencyCounter {
 		countersCache[schemaHash] = schemaVersionCounters
 	}
 
+	// Limit breached for adding frequency counters,
+	// stop adding more values.
+	if len(schemaVersionCounters) > frequencyCounterLimit {
+		return nil
+	}
+
 	frequencyCounter, ok := schemaVersionCounters[key]
 	if !ok {
 		frequencyCounter = NewFrequencyCounter(key)
